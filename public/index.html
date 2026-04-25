@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Online Clipboard — Real-time Clipboard</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+  <canvas id="bgCanvas"></canvas>
+
+  <!-- ═══ JOIN SCREEN ═══ -->
+  <div id="join-screen" class="screen active">
+    <nav class="top-nav">
+      <div class="nav-logo">
+        <div class="logo-mark">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+            <rect x="8" y="2" width="8" height="4" rx="1.5"/>
+            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+            <line x1="9" y1="12" x2="15" y2="12"/>
+            <line x1="9" y1="16" x2="13" y2="16"/>
+          </svg>
+        </div>
+        <span class="logo-text">Online Clipboard</span>
+      </div>
+      <div class="nav-right">
+        <span class="nav-pill">v2.0</span>
+        <span class="nav-pill green"><span class="live-dot"></span>Live</span>
+      </div>
+    </nav>
+
+    <div class="join-layout">
+      <!-- LEFT SIDE -->
+      <div class="join-left">
+        <div class="eyebrow"><span class="eyebrow-dot"></span>Real-time clipboard sync</div>
+        <h1 class="hero-h1">Copy once.<br/><span class="grad-text">Paste anywhere.</span></h1>
+        <p class="hero-p">Connect 8+ devices instantly. Share text, links, OTPs, and code across all your screens in real-time with zero friction.</p>
+
+        <div class="stats-row">
+          <div class="stat-block">
+            <span class="stat-n">8+</span>
+            <span class="stat-l">Devices</span>
+          </div>
+          <div class="stat-sep"></div>
+          <div class="stat-block">
+            <span class="stat-n">~95%</span>
+            <span class="stat-l">Uptime</span>
+          </div>
+          <div class="stat-sep"></div>
+          <div class="stat-block">
+            <span class="stat-n">~60%</span>
+            <span class="stat-l">Faster</span>
+          </div>
+        </div>
+
+        
+
+        <!-- Device illustration -->
+        <div class="device-visual">
+          <div class="dv-phone">
+            <div class="dv-screen">
+              <div class="dv-bar"></div>
+              <div class="dv-bar short"></div>
+              <div class="dv-synced">✓ Synced</div>
+            </div>
+          </div>
+          <div class="dv-sync-line">
+            <svg width="80" height="30" viewBox="0 0 80 30" fill="none">
+              <path d="M2 15 Q40 2 78 15" stroke="url(#sg)" stroke-width="1.5" stroke-dasharray="5 3" stroke-linecap="round"/>
+              <path d="M2 15 Q40 28 78 15" stroke="url(#sg2)" stroke-width="1.5" stroke-dasharray="5 3" stroke-linecap="round"/>
+              <defs>
+                <linearGradient id="sg" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#4f8ef7"/><stop offset="1" stop-color="#3ecf8e"/></linearGradient>
+                <linearGradient id="sg2" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#3ecf8e"/><stop offset="1" stop-color="#4f8ef7"/></linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <div class="dv-laptop">
+            <div class="dv-lscreen">
+              <div class="dv-bar"></div>
+              <div class="dv-bar short"></div>
+            </div>
+            <div class="dv-lbase"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT SIDE: JOIN CARD -->
+      <div class="join-right">
+        <div class="join-card">
+          <div class="jc-header">
+            <div class="jc-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <rect x="8" y="2" width="8" height="4" rx="1.5"/>
+                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+              </svg>
+            </div>
+            <div>
+              <h2 class="jc-title">Join a room</h2>
+              <p class="jc-sub">Enter a code or generate a new one</p>
+            </div>
+          </div>
+
+          <div class="field-g">
+            <label>Device name</label>
+            <input type="text" id="device-name" placeholder="e.g. abc456" maxlength="30" autocomplete="off"/>
+          </div>
+          <div class="field-g">
+            <label>Room code</label>
+            <div class="input-row">
+              <input type="text" id="room-code" placeholder="Enter or generate..." maxlength="30" spellcheck="false" autocomplete="off"/>
+              <button class="btn-gen" onclick="generateRoomCode()">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                Generate
+              </button>
+            </div>
+          </div>
+
+          <button class="btn-join" onclick="joinRoom()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+            Join Room
+          </button>
+
+          <p class="join-hint-text">Share room code with any device to sync instantly</p>
+
+          <div class="feat-chips">
+            <span class="fc">⚡ Real-time</span>
+            <span class="fc">🔒 Private rooms</span>
+            <span class="fc">📱 Any device</span>
+            <span class="fc">🆓 Free</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ APP SCREEN ═══ -->
+  <div id="app-screen" class="screen">
+    <header class="app-header">
+      <div class="h-brand">
+        <div class="logo-mark sm"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="8" y="2" width="8" height="4" rx="1.5"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg></div>
+        <span class="logo-text sm">Online Clipboard</span>
+      </div>
+      <div class="h-room">
+        <span class="room-tag">ROOM</span>
+        <span class="room-val" id="header-room">—</span>
+        <button class="icon-btn" onclick="copyRoomCode()" title="Copy"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+      </div>
+      <div class="h-status">
+        <span class="conn-dot" id="conn-dot"></span>
+        <span id="conn-label" class="conn-label">Connecting</span>
+      </div>
+      <button class="btn-leave" onclick="leaveRoom()">Leave</button>
+    </header>
+
+    <div class="app-body">
+      <div class="editor-panel">
+        <div class="devices-bar" id="devices-bar"></div>
+        <div class="peer-typing-bar" id="peer-typing-bar" style="display:none">
+          <span class="typing-dot"></span>
+          <span id="peer-typing-text">Someone is typing...</span>
+        </div>
+        <div class="editor-card">
+          <div class="editor-topbar">
+            <span class="editor-meta" id="editor-meta">Ready</span>
+            <div class="editor-acts">
+              <button class="act-btn" onclick="pasteFromDevice()">Paste</button>
+              <button class="act-btn" onclick="clearEditor()">Clear</button>
+              <button class="act-btn" id="copy-btn" onclick="copyContent()">Copy</button>
+            </div>
+          </div>
+          <textarea id="editor" placeholder="Type, paste or drop content here...&#10;&#10;Ctrl+Enter to sync instantly." oninput="onEditorInput()" ondragover="event.preventDefault()" ondrop="onDrop(event)"></textarea>
+          <div class="editor-footer">
+            <span id="char-count">0 characters</span>
+            <div class="footer-acts">
+              <button class="act-btn" onclick="downloadContent()">↓ Download</button>
+              <button class="btn-sync" id="sync-btn" onclick="syncContent()">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                Sync to all devices
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="file-upload-card">
+          <div class="file-card-header">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Share a file <span class="limit-tag">up to 50 MB</span>
+          </div>
+          <div class="file-drop-zone" id="file-drop-zone" ondragover="onFileDragOver(event)" ondragleave="onFileDragLeave(event)" ondrop="onFileDrop(event)" onclick="document.getElementById('file-input').click()">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <p>Drop any file or <span class="browse-link">browse</span></p>
+            <p class="drop-sub">PDF, images, zip, docx — any format</p>
+          </div>
+          <input type="file" id="file-input" style="display:none" onchange="onFileSelected(event)"/>
+          <div class="upload-progress" id="upload-progress" style="display:none">
+            <div class="prog-track"><div class="prog-fill" id="progress-bar-fill"></div></div>
+            <span class="prog-label" id="progress-label">Uploading...</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="history-panel">
+        <div class="panel-tabs">
+          <button class="p-tab active" id="tab-history" onclick="switchTab('history')">Sync History</button>
+          <button class="p-tab" id="tab-files" onclick="switchTab('files')">Files <span class="file-badge" id="file-badge" style="display:none">0</span></button>
+        </div>
+        <div id="pane-history" class="tab-pane active">
+          <div style="display:flex;justify-content:flex-end;margin-bottom:8px">
+            <button class="act-btn" onclick="clearHistory()">Clear all</button>
+          </div>
+          <div class="history-list" id="history-list">
+            <div class="empty-state"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4"/></svg><p>No syncs yet</p></div>
+          </div>
+        </div>
+        <div id="pane-files" class="tab-pane">
+          <div class="files-list" id="files-list">
+            <div class="empty-state"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><p>No files yet</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="app.js"></script>
+  <script>
+  // Particle canvas background
+  const canvas = document.getElementById('bgCanvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [];
+
+  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+
+  class Particle {
+    constructor() { this.reset(true); }
+    reset(init) {
+      this.x  = init ? Math.random() * W : (Math.random() > 0.5 ? 0 : W);
+      this.y  = init ? Math.random() * H : Math.random() * H;
+      this.vx = (Math.random() - 0.5) * 0.5;
+      this.vy = (Math.random() - 0.5) * 0.5;
+      this.r  = Math.random() * 1.6 + 0.3;
+      this.a  = Math.random() * 0.45 + 0.08;
+      this.hue = Math.random() > 0.6 ? '#3ecf8e' : Math.random() > 0.5 ? '#4f8ef7' : '#7b6fff';
+    }
+    update() {
+      this.x += this.vx; this.y += this.vy;
+      if (this.x < -10 || this.x > W+10 || this.y < -10 || this.y > H+10) this.reset(false);
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r, 0, Math.PI*2);
+      ctx.fillStyle = this.hue + Math.floor(this.a*255).toString(16).padStart(2,'0');
+      ctx.fill();
+    }
+  }
+
+  function init() { particles = []; for (let i=0; i<100; i++) particles.push(new Particle()); }
+
+  function drawConnections() {
+    for (let i=0; i<particles.length; i++) {
+      for (let j=i+1; j<particles.length; j++) {
+        const dx=particles[i].x-particles[j].x, dy=particles[i].y-particles[j].y;
+        const d=Math.sqrt(dx*dx+dy*dy);
+        if (d < 110) {
+          ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y); ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle=`rgba(79,142,247,${(1-d/110)*0.10})`; ctx.lineWidth=0.7; ctx.stroke();
+        }
+      }
+    }
+  }
+
+  function animate() {
+    ctx.clearRect(0,0,W,H);
+    // base glow
+    const g1=ctx.createRadialGradient(W*.15,H*.2,0,W*.15,H*.2,W*.55);
+    g1.addColorStop(0,'rgba(79,142,247,0.07)'); g1.addColorStop(1,'transparent');
+    ctx.fillStyle=g1; ctx.fillRect(0,0,W,H);
+    const g2=ctx.createRadialGradient(W*.85,H*.8,0,W*.85,H*.8,W*.5);
+    g2.addColorStop(0,'rgba(123,111,255,0.05)'); g2.addColorStop(1,'transparent');
+    ctx.fillStyle=g2; ctx.fillRect(0,0,W,H);
+    // grid
+    ctx.strokeStyle='rgba(79,142,247,0.035)'; ctx.lineWidth=1;
+    for(let x=0;x<W;x+=60){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+    for(let y=0;y<H;y+=60){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+    drawConnections();
+    particles.forEach(p=>{p.update();p.draw();});
+    requestAnimationFrame(animate);
+  }
+
+  window.addEventListener('resize', ()=>{ resize(); init(); });
+  resize(); init(); animate();
+  </script>
+</body>
+</html>
